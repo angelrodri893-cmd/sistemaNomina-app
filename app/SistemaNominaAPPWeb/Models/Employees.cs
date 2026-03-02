@@ -34,9 +34,9 @@
         [Required]
         [EmailAddress]
         [MaxLength(100)]
-        public string Correo { get; set; }
+        public string Correo { get; set; } // Campo para almacenar el correo electrónico del empleado
 
-        
+
         public bool IsActive { get; set; } = true; // Campo para indicar si el empleado está activo o no
     }
 }

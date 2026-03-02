@@ -1,6 +1,6 @@
 ﻿namespace SistemaNominaAPPWeb.Models
 {
-    // Modelo de datos para la tabla Employees
+    // Modelo de datos para la tabla "Employees"
     using System.ComponentModel.DataAnnotations;
     public class Employees
     {
@@ -36,7 +36,7 @@
         [MaxLength(100)]
         public string Correo { get; set; }
 
-        
+
         public bool IsActive { get; set; } = true; // Campo para indicar si el empleado está activo o no
     }
 }

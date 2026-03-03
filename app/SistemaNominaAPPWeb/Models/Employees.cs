@@ -2,7 +2,7 @@
 {
     // Modelo de datos para la tabla "Employees"
     using System.ComponentModel.DataAnnotations;
-    public class Employees
+    public class Employee
     {
         [Key]
         public int EmpNo { get; set; }

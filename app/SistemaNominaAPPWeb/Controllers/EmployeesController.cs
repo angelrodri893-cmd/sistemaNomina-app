@@ -20,9 +20,25 @@ namespace SistemaNominaAPPWeb.Controllers
         }
 
         // GET: Employees
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            return View(await _context.Employees.ToListAsync());
+            int pageSize = 5;
+
+            var totalEmployees = await _context.Employees
+                .Where(e => e.IsActive)
+                .CountAsync();
+
+            var employees = await _context.Employees
+                .Where(e => e.IsActive)
+                .OrderBy(e => e.EmpNo)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling(totalEmployees / (double)pageSize);
+
+            return View(employees);
         }
 
         // GET: Employees/Details/5
@@ -142,10 +158,11 @@ namespace SistemaNominaAPPWeb.Controllers
             var employee = await _context.Employees.FindAsync(id);
             if (employee != null)
             {
-                _context.Employees.Remove(employee);
+                employee.IsActive = false;
+                _context.Update(employee);
+                await _context.SaveChangesAsync(); ;
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

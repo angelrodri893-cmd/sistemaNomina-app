@@ -21,17 +21,14 @@ namespace SistemaNominaAPPWeb.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<DeptEmp>()
-                        .HasKey(d => new { d.EmpNo, d.DeptNo, d.FromDate });
+                .HasOne(d => d.Employee)
+                .WithMany()
+                .HasForeignKey(d => d.EmpNo);
 
             modelBuilder.Entity<DeptEmp>()
-                        .HasOne(d => d.Employee)
-                        .WithMany()
-                        .HasForeignKey(d => d.EmpNo);
-
-            modelBuilder.Entity<DeptEmp>()
-                        .HasOne(d => d.Department)
-                        .WithMany()
-                        .HasForeignKey(d => d.DeptNo);
+                .HasOne(d => d.Department)
+                .WithMany()
+                .HasForeignKey(d => d.DeptNo);
         }
     }
 }

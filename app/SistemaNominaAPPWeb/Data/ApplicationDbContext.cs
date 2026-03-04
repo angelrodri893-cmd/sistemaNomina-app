@@ -15,10 +15,20 @@ namespace SistemaNominaAPPWeb.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<DeptEmp> DeptEmps { get; set; }
-
+        public DbSet<Salary> Salaries { get; set; }
+        public DbSet<SalaryAudit> SalaryAudits { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<SalaryAudit>()
+                .Property(s => s.OldSalary)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<SalaryAudit>()
+                .Property(s => s.NewSalary)
+                .HasPrecision(18, 2);
 
             modelBuilder.Entity<DeptEmp>()
                         .HasKey(d => new { d.EmpNo, d.DeptNo, d.FromDate });

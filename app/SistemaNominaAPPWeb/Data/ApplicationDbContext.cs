@@ -1,25 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SistemaNominaAPPWeb.Models;
 using static SistemaNominaAPPWeb.Models.DeptEmp;
 
 namespace SistemaNominaAPPWeb.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-
         }
 
-        public DbSet<Employee> Employees { get; set; }
-        public DbSet<Department> Departments { get; set; }
-        public DbSet<DeptEmp> DeptEmps { get; set; }
-        public DbSet<Salary> Salaries { get; set; }
-        public DbSet<SalaryAudit> SalaryAudits { get; set; }
+        public DbSet<Employee> Employees { get; set; } = null!;
+        public DbSet<Department> Departments { get; set; } = null!;
+        public DbSet<DeptEmp> DeptEmps { get; set; } = null!;
+        public DbSet<Salary> Salaries { get; set; } = null!;
+        public DbSet<SalaryAudit> SalaryAudits { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<SalaryAudit>()

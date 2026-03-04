@@ -17,6 +17,7 @@ namespace SistemaNominaAPPWeb.Data
         public DbSet<DeptEmp> DeptEmps { get; set; }
         public DbSet<Salary> Salaries { get; set; }
         public DbSet<SalaryAudit> SalaryAudits { get; set; }
+        public DbSet<DeptManager> DeptManagers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -36,6 +37,16 @@ namespace SistemaNominaAPPWeb.Data
                 .HasForeignKey(d => d.EmpNo);
 
             modelBuilder.Entity<DeptEmp>()
+                .HasOne(d => d.Department)
+                .WithMany()
+                .HasForeignKey(d => d.DeptNo);
+
+            modelBuilder.Entity<DeptManager>()
+                .HasOne(d => d.Employee)
+                .WithMany()
+                .HasForeignKey(d => d.EmpNo);
+
+            modelBuilder.Entity<DeptManager>()
                 .HasOne(d => d.Department)
                 .WithMany()
                 .HasForeignKey(d => d.DeptNo);

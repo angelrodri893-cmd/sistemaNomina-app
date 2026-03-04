@@ -1,13 +1,13 @@
 ﻿@model SistemaNominaAPPWeb.Models.Employee
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Empleados";
 }
 
-<h1>Details</h1>
+<h1>Detalles</h1>
 
 <div>
-    <h4>Employee</h4>
+  
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -61,10 +61,7 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.EmpNo">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-    <a asp-controller="Salaries" asp-action="History" asp-route-empNo="@Model.EmpNo"
-    class="btn btn-info">
-        Ver Historial Salarial
-    </a>
+    <a asp-action="Edit" asp-route-id="@Model?.EmpNo">Editar</a> |
+    <a asp-action="Index">Volver a lista</a> |
+    <a asp-controller="Salaries" asp-action="History" asp-route-empNo="@Model.EmpNo"> Ver Historial Salarial </a>
 </div>

@@ -22,10 +22,10 @@ namespace SistemaNominaAPPWeb.Models
         public decimal Amount { get; set; }
 
         [Required]
-        [Display(Name = "Desde")]
+        [Display(Name = "Desde al fecha")]
         public DateTime FromDate { get; set; }
 
-        [Display(Name = "Hasta")]
+        [Display(Name = "Hasta la fecha")]
         public DateTime? ToDate { get; set; }
 
         [Display (Name = "Activo")]

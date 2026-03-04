@@ -22,9 +22,11 @@ namespace SistemaNominaAPPWeb.Models
         public DateTime? ToDate { get; set; }
 
         [ValidateNever]
+        [Display (Name = "Empleado")]
         public Employee Employee { get; set; }
 
         [ValidateNever]
+        [Display(Name = "Departamento")]
         public Department Department { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SistemaNominaAPPWeb.Data;
 
@@ -11,9 +12,11 @@ using SistemaNominaAPPWeb.Data;
 namespace SistemaNominaAPPWeb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260304020423_AddSalaryAudit")]
+    partial class AddSalaryAudit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,16 +48,10 @@ namespace SistemaNominaAPPWeb.Migrations
 
             modelBuilder.Entity("SistemaNominaAPPWeb.Models.DeptEmp", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("EmpNo")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("DeptNo")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EmpNo")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FromDate")
@@ -66,11 +63,9 @@ namespace SistemaNominaAPPWeb.Migrations
                     b.Property<DateTime?>("ToDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("EmpNo", "DeptNo", "FromDate");
 
                     b.HasIndex("DeptNo");
-
-                    b.HasIndex("EmpNo");
 
                     b.ToTable("DeptEmps");
                 });
@@ -171,11 +166,9 @@ namespace SistemaNominaAPPWeb.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("NewSalary")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("OldSalary")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("AuditId");

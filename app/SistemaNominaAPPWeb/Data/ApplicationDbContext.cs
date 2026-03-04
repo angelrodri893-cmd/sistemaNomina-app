@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SistemaNominaAPPWeb.Models;
+using static SistemaNominaAPPWeb.Models.DeptEmp;
 
 namespace SistemaNominaAPPWeb.Data
 {
@@ -13,14 +14,24 @@ namespace SistemaNominaAPPWeb.Data
 
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<DeptEmp> DeptEmps { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Employee>()
-                .HasIndex(e => e.Correo)
-                .IsUnique();
+            modelBuilder.Entity<DeptEmp>()
+                        .HasKey(d => new { d.EmpNo, d.DeptNo, d.FromDate });
+
+            modelBuilder.Entity<DeptEmp>()
+                        .HasOne(d => d.Employee)
+                        .WithMany()
+                        .HasForeignKey(d => d.EmpNo);
+
+            modelBuilder.Entity<DeptEmp>()
+                        .HasOne(d => d.Department)
+                        .WithMany()
+                        .HasForeignKey(d => d.DeptNo);
         }
     }
 }

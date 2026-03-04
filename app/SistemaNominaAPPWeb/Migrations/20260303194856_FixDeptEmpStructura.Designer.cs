@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SistemaNominaAPPWeb.Data;
 
@@ -11,9 +12,11 @@ using SistemaNominaAPPWeb.Data;
 namespace SistemaNominaAPPWeb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260303194856_FixDeptEmpStructura")]
+    partial class FixDeptEmpStructura
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,30 +44,6 @@ namespace SistemaNominaAPPWeb.Migrations
                     b.HasKey("DeptNo");
 
                     b.ToTable("Departments");
-                });
-
-            modelBuilder.Entity("SistemaNominaAPPWeb.Models.DeptEmp", b =>
-                {
-                    b.Property<int>("EmpNo")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DeptNo")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("FromDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ToDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("EmpNo", "DeptNo", "FromDate");
-
-                    b.HasIndex("DeptNo");
-
-                    b.ToTable("DeptEmps");
                 });
 
             modelBuilder.Entity("SistemaNominaAPPWeb.Models.Employee", b =>
@@ -118,7 +97,28 @@ namespace SistemaNominaAPPWeb.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("SistemaNominaAPPWeb.Models.DeptEmp", b =>
+            modelBuilder.Entity("SistemaNominaAPPWeb.Models.deptEmp+DeptEmp", b =>
+                {
+                    b.Property<int>("EmpNo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DeptNo")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("EmpNo", "DeptNo", "FromDate");
+
+                    b.HasIndex("DeptNo");
+
+                    b.ToTable("DeptEmps");
+                });
+
+            modelBuilder.Entity("SistemaNominaAPPWeb.Models.deptEmp+DeptEmp", b =>
                 {
                     b.HasOne("SistemaNominaAPPWeb.Models.Department", "Department")
                         .WithMany()

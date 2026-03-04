@@ -1,7 +1,8 @@
-﻿namespace SistemaNominaAPPWeb.Models
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace SistemaNominaAPPWeb.Models
 {
-    // Modelo de datos para la tabla "Employees"
-    using System.ComponentModel.DataAnnotations;
     public class Employee
     {
         [Key]

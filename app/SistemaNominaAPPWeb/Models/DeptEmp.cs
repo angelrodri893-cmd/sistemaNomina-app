@@ -20,10 +20,12 @@ namespace SistemaNominaAPPWeb.Models
         [Display(Name = "Hasta la fecha")]
         public DateTime? ToDate { get; set; }
 
-        [ValidateNever]
+        [ValidateNever] //Sirve para evitar que se valide esta propiedad, ya que no es un campo de entrada del usuario
+        [Display (Name = "Empleado")]
         public Employee Employee { get; set; }
 
         [ValidateNever]
+        [Display(Name = "Departamento")]
         public Department Department { get; set; }
 
         [Display(Name = "Activo")]

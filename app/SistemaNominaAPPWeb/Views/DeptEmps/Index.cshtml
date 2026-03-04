@@ -7,7 +7,7 @@
 <h1>Lista de Empleados asignados a un Departamento</h1>
 
 <p>
-    <a asp-action="Create">Crear nueva asignacion</a>
+    <a asp-action="Create">Nueva asignacion</a>
 </p>
 <table class="table">
     <thead>
@@ -37,9 +37,9 @@
                 @Html.DisplayFor(modelItem => item.Department.DeptName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Eliminar", "Delete", new { id = item.Id })
             </td>
         </tr>
 }

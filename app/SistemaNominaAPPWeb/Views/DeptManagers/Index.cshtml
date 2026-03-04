@@ -7,7 +7,7 @@
 <h1>Lista de Managers asignados a un Departamento</h1>
 
 <p>
-    <a asp-action="Create">Crear nuevo manager</a>
+    <a asp-action="Create">Agregar nuevo registro</a>
 </p>
 <table class="table">
     <thead>
@@ -24,7 +24,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Department)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -37,7 +36,7 @@
                 @Html.DisplayFor(modelItem => item.ToDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Employee.BirthDate)
+                @Html.DisplayFor(modelItem => item.Employee.FirstName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Department.DeptName)

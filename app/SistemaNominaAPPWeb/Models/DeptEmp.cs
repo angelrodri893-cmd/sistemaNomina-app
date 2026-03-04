@@ -1,10 +1,13 @@
-﻿    using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace SistemaNominaAPPWeb.Models
 {
     public class DeptEmp
     {
+        public int Id { get; set; }
+
         public int EmpNo { get; set; }
         public int DeptNo { get; set; }
 
@@ -12,8 +15,10 @@ namespace SistemaNominaAPPWeb.Models
 
         public DateTime? ToDate { get; set; }
 
+        [ValidateNever]
         public Employee Employee { get; set; }
 
+        [ValidateNever]
         public Department Department { get; set; }
 
         public bool IsActive { get; set; } = false;

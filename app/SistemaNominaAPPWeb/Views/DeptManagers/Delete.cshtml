@@ -1,4 +1,4 @@
-﻿@model SistemaNominaAPPWeb.Models.DeptEmp
+﻿@model SistemaNominaAPPWeb.Models.DeptManager
 
 @{
     ViewData["Title"] = "Eliminar";
@@ -8,9 +8,15 @@
 
 <h3>¿Estás seguro que deseas eliminar esto?</h3>
 <div>
-    <h4>Asignaciones</h4>
+    <h4>Control de Manager</h4>
     <hr />
     <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FromDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FromDate)
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ToDate)
         </dt>
@@ -32,9 +38,7 @@
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="EmpNo" />
-        <input type="hidden" asp-for="DeptNo" />
-        <input type="hidden" asp-for="FromDate" />
+        <input type="hidden" asp-for="Id" />
         <input type="submit" value="Eliminar" class="btn btn-danger" /> |
         <a asp-action="Index">Volver a lista</a>
     </form>

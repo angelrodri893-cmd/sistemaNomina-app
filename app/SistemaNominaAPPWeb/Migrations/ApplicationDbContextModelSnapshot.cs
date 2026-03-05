@@ -246,10 +246,16 @@ namespace SistemaNominaAPPWeb.Migrations
 
             modelBuilder.Entity("SistemaNominaAPPWeb.Models.DeptEmp", b =>
                 {
-                    b.Property<int>("EmpNo")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("DeptNo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmpNo")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FromDate")
@@ -261,11 +267,42 @@ namespace SistemaNominaAPPWeb.Migrations
                     b.Property<DateTime?>("ToDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("EmpNo", "DeptNo", "FromDate");
+                    b.HasKey("Id");
 
                     b.HasIndex("DeptNo");
 
+                    b.HasIndex("EmpNo");
+
                     b.ToTable("DeptEmps");
+                });
+
+            modelBuilder.Entity("SistemaNominaAPPWeb.Models.DeptManager", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DeptNo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmpNo")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeptNo");
+
+                    b.HasIndex("EmpNo");
+
+                    b.ToTable("DeptManagers");
                 });
 
             modelBuilder.Entity("SistemaNominaAPPWeb.Models.Employee", b =>
@@ -428,6 +465,25 @@ namespace SistemaNominaAPPWeb.Migrations
                 });
 
             modelBuilder.Entity("SistemaNominaAPPWeb.Models.DeptEmp", b =>
+                {
+                    b.HasOne("SistemaNominaAPPWeb.Models.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DeptNo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SistemaNominaAPPWeb.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmpNo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SistemaNominaAPPWeb.Models.DeptManager", b =>
                 {
                     b.HasOne("SistemaNominaAPPWeb.Models.Department", "Department")
                         .WithMany()

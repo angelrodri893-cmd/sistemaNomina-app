@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<SistemaNominaAPPWeb.Models.Salary>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Salarios";
 }
 
-<h1>Index</h1>
+<h1>Lista de Salarios</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Agregar nuevo registro</a>
 </p>
 <table class="table">
     <thead>
@@ -34,7 +34,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Employee.BirthDate)
+                @Html.DisplayFor(modelItem => item.Employee.FirstName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Amount)
@@ -49,9 +49,9 @@
                 @Html.DisplayFor(modelItem => item.IsActive)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.SalaryId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SalaryId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SalaryId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.SalaryId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.SalaryId">Detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.SalaryId">Eliminar</a> 
             </td>
         </tr>
 }

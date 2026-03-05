@@ -45,12 +45,15 @@
                 @Html.ActionLink("Details", "Details", new {
                     empNo = item.EmpNo,
                     deptNo = item.DeptNo,
-                }) |
-
-                @Html.ActionLink("Delete", "Delete", new {
-                    empNo = item.EmpNo,
-                    deptNo = item.DeptNo,
                 })
+
+                @if (User.IsInRole("Administrador"))
+                {
+                    <span>|</span> @Html.ActionLink("Delete", "Delete", new {
+                        empNo = item.EmpNo,
+                        deptNo = item.DeptNo,
+                    })
+                }
             </td>
         </tr>
 }

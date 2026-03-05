@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using SistemaNominaAPPWeb.Data;
 using SistemaNominaAPPWeb.Models;
 
 namespace SistemaNominaAPPWeb.Controllers
 {
+    [Authorize(Roles = "Administrador,RRHH")]
     public class DeptEmpsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -138,6 +140,7 @@ namespace SistemaNominaAPPWeb.Controllers
         }
 
         // GET: DeptEmps/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int empNo, int deptNo, DateTime fromDate)
         {
             var deptEmp = await _context.DeptEmps
@@ -159,6 +162,7 @@ namespace SistemaNominaAPPWeb.Controllers
         // POST: DeptEmps/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteConfirmed(int empNo, int deptNo, DateTime fromDate)
         {
             var deptEmp = await _context.DeptEmps

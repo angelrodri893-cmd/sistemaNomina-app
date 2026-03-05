@@ -50,8 +50,11 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.SalaryId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SalaryId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SalaryId">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.SalaryId">Details</a>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <span>|</span> <a asp-action="Delete" asp-route-id="@item.SalaryId">Delete</a>
+                }
             </td>
         </tr>
 }

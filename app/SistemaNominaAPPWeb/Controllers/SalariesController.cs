@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using SistemaNominaAPPWeb.Data;
 using SistemaNominaAPPWeb.Models;
 
 namespace SistemaNominaAPPWeb.Controllers
 {
+    [Authorize(Roles = "Administrador,RRHH")]
     public class SalariesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -159,6 +161,7 @@ namespace SistemaNominaAPPWeb.Controllers
         }
 
         // GET: Salaries/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -180,6 +183,7 @@ namespace SistemaNominaAPPWeb.Controllers
         // POST: Salaries/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var salary = await _context.Salaries.FindAsync(id);

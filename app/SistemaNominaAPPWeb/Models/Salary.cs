@@ -15,6 +15,7 @@ namespace SistemaNominaAPPWeb.Models
         public Employee? Employee { get; set; }
 
         [Required]
+        [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor a 0")]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }
 

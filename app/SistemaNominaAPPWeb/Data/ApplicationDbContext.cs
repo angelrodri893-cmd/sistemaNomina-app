@@ -18,6 +18,7 @@ namespace SistemaNominaAPPWeb.Data
         public DbSet<DeptEmp> DeptEmps { get; set; } = null!;
         public DbSet<Salary> Salaries { get; set; } = null!;
         public DbSet<SalaryAudit> SalaryAudits { get; set; } = null!;
+        public DbSet<DeptManager> DeptManagers { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

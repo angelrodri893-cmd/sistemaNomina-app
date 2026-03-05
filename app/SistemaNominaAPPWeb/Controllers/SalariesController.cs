@@ -61,7 +61,7 @@ namespace SistemaNominaAPPWeb.Controllers
         // GET: Salaries/Create
         public IActionResult Create()
         {
-            ViewData["EmpNo"] = new SelectList(_context.Employees, "EmpNo", "BirthDate");
+            ViewData["EmpNo"] = new SelectList(_context.Employees, "EmpNo", "FirstName");
             return View();
         }
 
@@ -129,7 +129,7 @@ namespace SistemaNominaAPPWeb.Controllers
             {
                 return NotFound();
             }
-            ViewData["EmpNo"] = new SelectList(_context.Employees, "EmpNo", "BirthDate", salary.EmpNo);
+            ViewData["EmpNo"] = new SelectList(_context.Employees, "EmpNo", "FirstName", salary.EmpNo);
             return View(salary);
         }
 
@@ -165,7 +165,7 @@ namespace SistemaNominaAPPWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmpNo"] = new SelectList(_context.Employees, "EmpNo", "BirthDate", salary.EmpNo);
+            ViewData["EmpNo"] = new SelectList(_context.Employees, "EmpNo", "FirstName", salary.EmpNo);
             return View(salary);
         }
 

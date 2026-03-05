@@ -1,25 +1,25 @@
 ﻿@model IEnumerable<SistemaNominaAPPWeb.Models.DeptEmp>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Asignacion Empleados";
 }
 
-<h1>Listado de Empleados asignados a un Departamento</h1>
+<h1>Lista de Empleados asignados a un Departamento</h1>
 
 <p>
-    <a asp-action="Create">Crear nueva asignacion</a>
+    <a asp-action="Create">Nueva asignacion</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ToDate)
+                @Html.DisplayNameFor(model => model.First().ToDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Employee)
+                @Html.DisplayNameFor(model => model.First().Employee)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Department)
+                @Html.DisplayNameFor(model => model.First().Department)
             </th>
             <th></th>
         </tr>
@@ -28,7 +28,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ToDate)
+                @item.ToDate?.ToString("dd/MM/yyyy HH:mm")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Employee.FirstName)
@@ -37,6 +37,7 @@
                 @Html.DisplayFor(modelItem => item.Department.DeptName)
             </td>
             <td>
+
                 @Html.ActionLink("Edit", "Edit", new {
                     empNo = item.EmpNo,
                     deptNo = item.DeptNo,
@@ -54,6 +55,7 @@
                         deptNo = item.DeptNo,
                     })
                 }
+
             </td>
         </tr>
 }

@@ -1,14 +1,14 @@
 ﻿@model SistemaNominaAPPWeb.Models.Department
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Departamentos";
 }
 
-<h1>Delete</h1>
+<h1>Eliminar</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>¿Estás seguro que deseas eliminar esto?</h3>
 <div>
-    <h4>Department</h4>
+    
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -27,7 +27,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="DeptNo" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index">Volver a lista</a>
     </form>
 </div>

@@ -8,6 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using SistemaNominaAPPWeb.Data;
 using SistemaNominaAPPWeb.Models;
+using SistemaNominaAPPWeb.Services;
+using ClosedXML.Excel;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
+using System.IO;
 
 namespace SistemaNominaAPPWeb.Controllers
 {
@@ -15,10 +21,12 @@ namespace SistemaNominaAPPWeb.Controllers
     public class SalariesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IPayrollService _payrollService;
 
-        public SalariesController(ApplicationDbContext context)
+        public SalariesController(ApplicationDbContext context, IPayrollService payrollService)
         {
             _context = context;
+            _payrollService = payrollService;
         }
 
         // GET: Salaries
@@ -97,6 +105,7 @@ namespace SistemaNominaAPPWeb.Controllers
                 }
 
                 salary.IsActive = true;
+                _payrollService.CalculatePayroll(salary);
 
                 _context.Add(salary);
                 await _context.SaveChangesAsync();
@@ -199,6 +208,147 @@ namespace SistemaNominaAPPWeb.Controllers
         private bool SalaryExists(int id)
         {
             return _context.Salaries.Any(e => e.SalaryId == id);
+        }
+
+        public async Task<IActionResult> ExportHistoryPdf(int empNo)
+        {
+            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmpNo == empNo);
+            if (employee == null) return NotFound();
+
+            var salaries = await _context.Salaries
+                .Include(s => s.Employee)
+                .Where(s => s.EmpNo == empNo)
+                .OrderByDescending(s => s.FromDate)
+                .ToListAsync();
+
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            var document = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(2, Unit.Centimetre);
+                    page.PageColor(Colors.White);
+                    page.DefaultTextStyle(x => x.FontSize(11));
+
+                    page.Header().Element(x => ComposeHeader(x, employee));
+                    page.Content().Element(x => ComposeContent(x, salaries));
+                    page.Footer().AlignCenter().Text(x =>
+                    {
+                        x.Span("Página ");
+                        x.CurrentPageNumber();
+                    });
+                });
+            });
+
+            var pdfFile = document.GeneratePdf();
+            return File(pdfFile, "application/pdf", $"Salarios_{empNo}.pdf");
+        }
+
+        public async Task<IActionResult> ExportSalariesExcel()
+        {
+            var salaries = await _context.Salaries
+                .Include(s => s.Employee)
+                .OrderBy(s => s.Employee.FirstName)
+                .ThenByDescending(s => s.FromDate)
+                .ToListAsync();
+
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Historial Salarial");
+
+            var headers = new[] { "Empleado", "Monto", "Neto", "AFP", "SFS", "ISR", "Fecha Desde", "Fecha Hasta", "Activo" };
+            for (int i = 0; i < headers.Length; i++)
+            {
+                worksheet.Cell(1, i + 1).Value = headers[i];
+            }
+
+            var headerRow = worksheet.Range("A1:I1");
+            headerRow.Style.Font.Bold = true;
+            headerRow.Style.Fill.BackgroundColor = XLColor.Teal;
+            headerRow.Style.Font.FontColor = XLColor.White;
+
+            for (int i = 0; i < salaries.Count; i++)
+            {
+                var row = i + 2;
+                var sal = salaries[i];
+                worksheet.Cell(row, 1).Value = $"{sal.Employee.FirstName} {sal.Employee.LastName}";
+                worksheet.Cell(row, 2).Value = sal.Amount;
+                worksheet.Cell(row, 2).Style.NumberFormat.Format = "$ #,##0.00";
+                worksheet.Cell(row, 3).Value = sal.NetSalary;
+                worksheet.Cell(row, 3).Style.NumberFormat.Format = "$ #,##0.00";
+                worksheet.Cell(row, 4).Value = sal.AfpDeduction;
+                worksheet.Cell(row, 4).Style.NumberFormat.Format = "$ #,##0.00";
+                worksheet.Cell(row, 5).Value = sal.SfsDeduction;
+                worksheet.Cell(row, 5).Style.NumberFormat.Format = "$ #,##0.00";
+                worksheet.Cell(row, 6).Value = sal.IsrDeduction;
+                worksheet.Cell(row, 6).Style.NumberFormat.Format = "$ #,##0.00";
+                worksheet.Cell(row, 7).Value = sal.FromDate.ToShortDateString();
+                worksheet.Cell(row, 8).Value = sal.ToDate?.ToShortDateString() ?? "Actualidad";
+                worksheet.Cell(row, 9).Value = sal.IsActive ? "Sí" : "No";
+            }
+
+            worksheet.Columns().AdjustToContents();
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"HistorialSalarial_{DateTime.Now:yyyyMMdd}.xlsx");
+        }
+
+        private void ComposeHeader(IContainer container, Employee employee)
+        {
+            container.Row(row =>
+            {
+                row.RelativeItem().Column(column =>
+                {
+                    column.Item().Text($"Historial Salarial: {employee.FirstName} {employee.LastName}").FontSize(20).SemiBold().FontColor(Colors.Blue.Darken2);
+                    column.Item().Text(text =>
+                    {
+                        text.Span("Generado el: ").SemiBold();
+                        text.Span($"{DateTime.Now:dd/MM/yyyy HH:mm}");
+                    });
+                });
+            });
+        }
+
+        private void ComposeContent(IContainer container, List<Salary> salaries)
+        {
+            container.PaddingVertical(1, Unit.Centimetre).Column(column =>
+            {
+                column.Item().Table(table =>
+                {
+                    table.ColumnsDefinition(columns =>
+                    {
+                        columns.RelativeColumn();
+                        columns.RelativeColumn();
+                        columns.RelativeColumn();
+                        columns.RelativeColumn();
+                        columns.RelativeColumn();
+                    });
+
+                    table.Header(header =>
+                    {
+                        header.Cell().Element(CellStyle).Text("Monto");
+                        header.Cell().Element(CellStyle).Text("Salario Neto");
+                        header.Cell().Element(CellStyle).Text("Desde");
+                        header.Cell().Element(CellStyle).Text("Hasta");
+                        header.Cell().Element(CellStyle).Text("Activo");
+
+                        static IContainer CellStyle(IContainer container) => container.DefaultTextStyle(x => x.SemiBold()).PaddingVertical(5).BorderBottom(1).BorderColor(Colors.Black);
+                    });
+
+                    foreach (var sal in salaries)
+                    {
+                        table.Cell().Element(CellStyle).Text($"{sal.Amount:C}");
+                        table.Cell().Element(CellStyle).Text($"{sal.NetSalary:C}");
+                        table.Cell().Element(CellStyle).Text(sal.FromDate.ToShortDateString());
+                        table.Cell().Element(CellStyle).Text(sal.ToDate?.ToShortDateString() ?? "N/A");
+                        table.Cell().Element(CellStyle).Text(sal.IsActive ? "Sí" : "No");
+
+                        static IContainer CellStyle(IContainer container) => container.BorderBottom(1).BorderColor(Colors.Grey.Lighten2).PaddingVertical(5);
+                    }
+                });
+            });
         }
 
         public async Task<IActionResult> History(int empNo)

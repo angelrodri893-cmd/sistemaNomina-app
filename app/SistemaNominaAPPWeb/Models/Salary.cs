@@ -25,5 +25,17 @@ namespace SistemaNominaAPPWeb.Models
         public DateTime? ToDate { get; set; }
 
         public bool IsActive { get; set; } = true;
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal NetSalary { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal AfpDeduction { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal SfsDeduction { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal IsrDeduction { get; set; }
     }
 }

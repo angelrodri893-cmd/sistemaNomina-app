@@ -1,0 +1,70 @@
+﻿@model IEnumerable<SistemaNominaAPPWeb.Models.Salary>
+
+@{
+    ViewData["Title"] = "Salarios";
+}
+
+<h1>Lista de Salarios</h1>
+
+<p>
+    <a asp-action="Create">Agregar nuevo registro</a>
+</p>
+
+<div class="mb-3">
+    <a asp-action="ExportSalariesExcel" class="btn btn-success">Exportar Todos a Excel</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FromDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ToDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FromDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ToDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+
+                <a asp-action="Edit" asp-route-id="@item.SalaryId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SalaryId">Details</a> |
+                <a asp-action="ExportHistoryPdf" asp-route-empNo="@item.EmpNo" class="text-danger">PDF Historial</a>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <span>|</span> <a asp-action="Delete" asp-route-id="@item.SalaryId">Delete</a>
+                }
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

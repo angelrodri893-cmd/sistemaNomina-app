@@ -1,0 +1,44 @@
+﻿@model IEnumerable<SistemaNominaAPPWeb.Models.Department>
+
+@{
+    ViewData["Title"] = "Departamentos";
+}
+
+<h1>Listado de Departamentos Activos</h1>
+
+<p>
+    <a asp-action="Create">Nuevo departamento</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DeptName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeptName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.DeptNo">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.DeptNo">Detalles</a>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <span>|</span> <a asp-action="Delete" asp-route-id="@item.DeptNo">Eliminar</a>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

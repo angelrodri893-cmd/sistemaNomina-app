@@ -6,7 +6,6 @@ namespace SistemaNominaAPPWeb.Models
 {
     public class DeptEmp
     {
-        public int Id { get; set; }
 
         [Display(Name = "Empleado")]
         public int EmpNo { get; set; }

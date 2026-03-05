@@ -33,6 +33,9 @@ namespace SistemaNominaAPPWeb.Data
                 .HasPrecision(18, 2);
 
             modelBuilder.Entity<DeptEmp>()
+                .HasKey(d => new { d.EmpNo, d.DeptNo, d.FromDate });
+
+            modelBuilder.Entity<DeptEmp>()
                 .HasOne(d => d.Employee)
                 .WithMany()
                 .HasForeignKey(d => d.EmpNo);

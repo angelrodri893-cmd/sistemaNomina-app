@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SistemaNominaAPPWeb.Data;
 using SistemaNominaAPPWeb.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SistemaNominaAPPWeb.Controllers
 {
+    [Authorize(Roles = "Administrador,RRHH")]
     public class DeptEmpsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,12 +30,12 @@ namespace SistemaNominaAPPWeb.Controllers
         }
 
         // GET: DeptEmps/Details/5
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int empNo, int deptNo, DateTime fromDate)
         {
             var deptEmp = await _context.DeptEmps
                 .Include(d => d.Employee)
                 .Include(d => d.Department)
-                .FirstOrDefaultAsync(d => d.Id == id);
+                .FirstOrDefaultAsync(d => d.EmpNo == empNo && d.DeptNo == deptNo && d.FromDate == fromDate);
 
             if (deptEmp == null)
                 return NotFound();
@@ -71,12 +74,16 @@ namespace SistemaNominaAPPWeb.Controllers
         }
 
         // GET: DeptEmps/Edit/5
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int empNo, int deptNo, DateTime fromDate)
         {
-            var deptEmp = await _context.DeptEmps.FindAsync(id);
+            var deptEmp = await _context.DeptEmps
+                .FirstOrDefaultAsync(d => d.EmpNo == empNo && d.DeptNo == deptNo && d.FromDate == fromDate);
 
             if (deptEmp == null)
                 return NotFound();
+
+            ViewData["EmpNo"] = new SelectList(_context.Employees, "EmpNo", "FirstName", deptEmp.EmpNo);
+            ViewData["DeptNo"] = new SelectList(_context.Departments, "DeptNo", "DeptName", deptEmp.DeptNo);
 
             return View(deptEmp);
         }
@@ -86,10 +93,10 @@ namespace SistemaNominaAPPWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,
-            [Bind("Id,EmpNo,DeptNo,FromDate,ToDate,IsActive")] DeptEmp deptEmp)
+        public async Task<IActionResult> Edit(int empNo, int deptNo, DateTime fromDate,
+            [Bind("EmpNo,DeptNo,FromDate,ToDate,IsActive")] DeptEmp deptEmp)
         {
-            if (id != deptEmp.Id)
+            if (empNo != deptEmp.EmpNo || deptNo != deptEmp.DeptNo || fromDate != deptEmp.FromDate)
                 return NotFound();
 
             if (!ModelState.IsValid)
@@ -106,12 +113,17 @@ namespace SistemaNominaAPPWeb.Controllers
         }
 
         // GET: DeptEmps/Delete/5
-        public async Task<IActionResult> Delete(int id)
-        {
-            var deptEmp = await _context.DeptEmps.FindAsync(id);
 
-            if (deptEmp == null)
-                return NotFound();
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> Delete(int empNo, int deptNo, DateTime fromDate)
+
+        {
+            var deptEmp = await _context.DeptEmps
+                .Include(d => d.Employee)
+                .Include(d => d.Department)
+                .FirstOrDefaultAsync(m => m.EmpNo == empNo && m.DeptNo == deptNo && m.FromDate == fromDate);
+
+            if (deptEmp == null) return NotFound();
 
             return View(deptEmp);
         }
@@ -119,16 +131,16 @@ namespace SistemaNominaAPPWeb.Controllers
         // POST: DeptEmps/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> DeleteConfirmed(int empNo, int deptNo, DateTime fromDate)
         {
-            var deptEmp = await _context.DeptEmps.FindAsync(id);
-
+            var deptEmp = await _context.DeptEmps
+                .FirstOrDefaultAsync(d => d.EmpNo == empNo && d.DeptNo == deptNo && d.FromDate == fromDate);
             if (deptEmp != null)
             {
                 _context.DeptEmps.Remove(deptEmp);
                 await _context.SaveChangesAsync();
-            }
-
+            } 
             return RedirectToAction(nameof(Index));
         }
     }

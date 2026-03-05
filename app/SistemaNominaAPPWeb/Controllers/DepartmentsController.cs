@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using SistemaNominaAPPWeb.Data;
 using SistemaNominaAPPWeb.Models;
 
 namespace SistemaNominaAPPWeb.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     public class DepartmentsController : Controller
     {
         private readonly ApplicationDbContext _context;

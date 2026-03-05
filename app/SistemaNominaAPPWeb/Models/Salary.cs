@@ -17,6 +17,7 @@ namespace SistemaNominaAPPWeb.Models
         public Employee? Employee { get; set; }
 
         [Required]
+        [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor a 0")]
         [Column(TypeName = "decimal(18,2)")]
         [Display(Name = "Monto")]
         public decimal Amount { get; set; }
@@ -30,5 +31,17 @@ namespace SistemaNominaAPPWeb.Models
 
         [Display (Name = "Activo")]
         public bool IsActive { get; set; } = true;
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal NetSalary { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal AfpDeduction { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal SfsDeduction { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal IsrDeduction { get; set; }
     }
 }

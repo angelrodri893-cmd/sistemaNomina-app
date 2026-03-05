@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using SistemaNominaAPPWeb.Models;
 using SistemaNominaAPPWeb.Models.ViewModels;
 
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 namespace SistemaNominaAPPWeb.Controllers
 {
     public class AccountController : Controller
@@ -16,12 +19,14 @@ namespace SistemaNominaAPPWeb.Controllers
             _signInManager = signInManager;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -52,6 +57,7 @@ namespace SistemaNominaAPPWeb.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Login(string returnUrl = null!)
         {
@@ -59,6 +65,7 @@ namespace SistemaNominaAPPWeb.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null!)

@@ -37,9 +37,14 @@
                 @Html.DisplayFor(modelItem => item.Department.DeptName)
             </td>
             <td>
-                @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Eliminar", "Delete", new { id = item.Id })
+                <a asp-action="Edit" asp-route-empNo="@item.EmpNo" asp-route-deptNo="@item.DeptNo" asp-route-fromDate="@item.FromDate.ToString("yyyy-MM-ddTHH:mm:ss")">Edit</a> |
+                <a asp-action="Details" asp-route-empNo="@item.EmpNo" asp-route-deptNo="@item.DeptNo" asp-route-fromDate="@item.FromDate.ToString("yyyy-MM-ddTHH:mm:ss")">Details</a>
+
+                @if (User.IsInRole("Administrador"))
+                {
+                    <span>|</span> <a asp-action="Delete" asp-route-empNo="@item.EmpNo" asp-route-deptNo="@item.DeptNo" asp-route-fromDate="@item.FromDate.ToString("yyyy-MM-ddTHH:mm:ss")">Delete</a>
+                }
+
             </td>
         </tr>
 }

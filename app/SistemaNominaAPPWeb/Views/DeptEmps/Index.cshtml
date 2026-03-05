@@ -37,12 +37,12 @@
                 @Html.DisplayFor(modelItem => item.Department.DeptName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                <a asp-action="Edit" asp-route-empNo="@item.EmpNo" asp-route-deptNo="@item.DeptNo" asp-route-fromDate="@item.FromDate.ToString("yyyy-MM-ddTHH:mm:ss")">Edit</a> |
+                <a asp-action="Details" asp-route-empNo="@item.EmpNo" asp-route-deptNo="@item.DeptNo" asp-route-fromDate="@item.FromDate.ToString("yyyy-MM-ddTHH:mm:ss")">Details</a>
 
                 @if (User.IsInRole("Administrador"))
                 {
-                    <span>|</span> <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <span>|</span> <a asp-action="Delete" asp-route-empNo="@item.EmpNo" asp-route-deptNo="@item.DeptNo" asp-route-fromDate="@item.FromDate.ToString("yyyy-MM-ddTHH:mm:ss")">Delete</a>
                 }
 
             </td>

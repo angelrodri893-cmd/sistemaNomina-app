@@ -117,16 +117,95 @@ using (var scope = app.Services.CreateScope())
 
     if (await userManager.FindByEmailAsync(email) == null)
     {
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        
+        var adminEmp = new Employee 
+        { 
+            CI = "00000000000",
+            BirthDate = "1990-01-01",
+            FirstName = "Admin", 
+            LastName = "System", 
+            Gender = "M",
+            HireDate = "2024-01-01",
+            Correo = email,
+            IsActive = true 
+        };
+        db.Employees.Add(adminEmp);
+        await db.SaveChangesAsync();
+
         var user = new ApplicationUser
         {
             UserName = email,
             Email = email,
-            EmpNo = null
+            EmpNo = adminEmp.EmpNo
         };
 
-        await userManager.CreateAsync(user, password);
-        await userManager.AddToRoleAsync(user, "Administrador");
+        var resultAdmin = await userManager.CreateAsync(user, password);
+
+        if (resultAdmin.Succeeded)
+        {
+            await userManager.AddToRoleAsync(user, "Administrador");
+        }
+        else
+        {
+            foreach (var error in resultAdmin.Errors)
+            {
+                Console.WriteLine($"Error creando Admin: {error.Description}");
+            }
+        }
+    }
+
+    string emailRrhh = "rrhh@sistema.com";
+    string passwordRrhh = "RRHH123!";
+
+    if (await userManager.FindByEmailAsync(emailRrhh) == null)
+    {
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        var rrhhEmp = new Employee 
+        { 
+            CI = "11111111111",
+            BirthDate = "1990-01-01",
+            FirstName = "Recursos", 
+            LastName = "Humanos", 
+            Gender = "F",
+            HireDate = "2024-01-01",
+            Correo = emailRrhh,
+            IsActive = true 
+        };
+        db.Employees.Add(rrhhEmp);
+        await db.SaveChangesAsync();
+
+        var userRrhh = new ApplicationUser
+        {
+            UserName = emailRrhh,
+            Email = emailRrhh,
+            EmpNo = rrhhEmp.EmpNo
+        };
+
+        var resultRrhh = await userManager.CreateAsync(userRrhh, passwordRrhh);
+
+        if (!resultRrhh.Succeeded)
+        {
+            foreach (var error in resultRrhh.Errors)
+            {
+                Console.WriteLine("ERROR CREANDO RRHH: " + error.Description);
+            }
+        }
+        else
+        {
+            var roleResult = await userManager.AddToRoleAsync(userRrhh, "RRHH");
+
+            if (!roleResult.Succeeded)
+            {
+                foreach (var error in roleResult.Errors)
+                {
+                    Console.WriteLine("ERROR ASIGNANDO ROL RRHH: " + error.Description);
+                }
+            }
+        }
     }
 }
 
 app.Run();
+

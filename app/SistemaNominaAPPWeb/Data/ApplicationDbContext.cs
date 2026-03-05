@@ -19,6 +19,7 @@ namespace SistemaNominaAPPWeb.Data
         public DbSet<Salary> Salaries { get; set; } = null!;
         public DbSet<SalaryAudit> SalaryAudits { get; set; } = null!;
         public DbSet<DeptManager> DeptManagers { get; set; } = null!;
+        public DbSet<Title> Titles { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,9 +29,20 @@ namespace SistemaNominaAPPWeb.Data
                 .Property(s => s.OldSalary)
                 .HasPrecision(18, 2);
 
+            modelBuilder.Entity<Title>()
+                .HasKey(t => new { t.EmpNo, t.TitleName, t.FromDate });
+
+            modelBuilder.Entity<Title>()
+                .HasOne(t => t.Employee)
+                .WithMany()
+                .HasForeignKey(t => t.EmpNo);
+
             modelBuilder.Entity<SalaryAudit>()
                 .Property(s => s.NewSalary)
                 .HasPrecision(18, 2);
+
+            modelBuilder.Entity<DeptEmp>()
+                .HasKey(d => new { d.EmpNo, d.DeptNo, d.FromDate });
 
             modelBuilder.Entity<DeptEmp>()
                 .HasOne(d => d.Employee)

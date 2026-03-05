@@ -31,6 +31,6 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
+    <a asp-action="Edit" asp-route-empNo="@Model.EmpNo" asp-route-deptNo="@Model.DeptNo" asp-route-fromDate="@Model.FromDate.ToString("yyyy-MM-ddTHH:mm:ss")">Editar</a> |
     <a asp-action="Index">Volver a lista</a>
 </div>
